@@ -2,14 +2,24 @@ package vidmot;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import vinnsla.Floskur;
 
-public class FloskurController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class FloskurController /*implements Initializable*/ {
     Floskur floskur = new Floskur();
+    /*private Floskur vinnsluTilvisun;*/
+
+    /*@Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        vinnsluTilvisun = new Floskur();
+    }*/
 
     @FXML
     private HBox dosirHBox;
@@ -51,6 +61,14 @@ public class FloskurController {
      */
     @FXML
     protected void onDosir(ActionEvent actionEvent) {
+        try {
+            int fjoldiD = Integer.parseInt(textFieldDosir.getText());
+            floskur.setFjoldiDosir(fjoldiD);
+            dosirLabel.setText(String.valueOf(fjoldiD));
+        }
+        catch (Exception e) {
+
+        }
     }
 
     /**
@@ -60,6 +78,14 @@ public class FloskurController {
      */
     @FXML
     protected void onFloskur(ActionEvent actionEvent) {
+        try {
+            int fjoldiF = Integer.parseInt(textFieldFloskur.getText());
+            floskur.setFjoldiDosir(fjoldiF);
+            floskurLabel.setText(String.valueOf(fjoldiF));
+        }
+        catch (Exception e) {
+
+        }
     }
 
     /**
@@ -69,6 +95,7 @@ public class FloskurController {
      */
     @FXML
     protected void onGreida(ActionEvent actionEvent) {
+
     }
 
     /**
@@ -85,7 +112,5 @@ public class FloskurController {
         floskurLabel.setText("0");
         samtalsEinn.setText("0");
         samtalsTveir.setText("0");
-        greidaEinn.setText("0");
-        greidaTveir.setText("0");
     }
 }

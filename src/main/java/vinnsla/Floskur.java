@@ -14,7 +14,6 @@ public class Floskur {
      */
     public void setFjoldiDosir(int dosir) {
         this.fjoldiDosir = dosir;
-        this.virdiDosir = dosir * 25;
     }
 
     /**
@@ -35,7 +34,6 @@ public class Floskur {
      */
     public void setFjoldiFloskur(int floskur) {
         this.fjoldiFloskur = floskur;
-        this.virdiFloskur = floskur * 25;
     }
 
     /**
