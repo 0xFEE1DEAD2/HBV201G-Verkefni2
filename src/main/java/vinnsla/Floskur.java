@@ -7,13 +7,26 @@ public class Floskur {
     private int virdiFloskur;
     private int fjoldiFloskur;
 
+    private static final int VERD_DOSIR = 20;
+    private static final int VERD_FLOSKUR = 25;
+
     /**
      * Setur fjölda dósa og uppfærir viðri dósa.
      *
      * @param dosir
      */
     public void setFjoldiDosir(int dosir) {
-        this.fjoldiDosir = dosir;
+        this.fjoldiDosir += dosir;
+        this.virdiDosir = this.fjoldiDosir * VERD_DOSIR;
+    }
+
+    /**
+     * Skilar fjölda flaska.
+     *
+     * @return fjöldi flaska
+     */
+    public int getFjoldiFloskur() {
+        return fjoldiFloskur;
     }
 
     /**
@@ -25,24 +38,31 @@ public class Floskur {
         return this.virdiDosir;
     }
 
-
-
     /**
      * Setur fjölda flaska og uppfærir viðri dósa.
      *
      * @param floskur
      */
     public void setFjoldiFloskur(int floskur) {
-        this.fjoldiFloskur = floskur;
+        this.fjoldiFloskur += floskur;
+        this.virdiFloskur = this.fjoldiFloskur * VERD_FLOSKUR;
+    }
+
+    /**
+     * Skilar fjölda dósa.
+     *
+     * @return fjöldi dósa
+     */
+    public int getFjoldiDosir() {
+        return fjoldiDosir;
     }
 
     /**
      * Skilar virði flaska.
      *
-     * @param dosir
      * @return virdiFloskur
      */
-    public int getISKFloskur(int dosir) {
+    public int getISKFloskur() {
         return this.virdiFloskur;
     }
 

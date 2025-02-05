@@ -17,6 +17,11 @@ public class FloskurApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Aðal klasi sem keyrir forritið.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch();
     }

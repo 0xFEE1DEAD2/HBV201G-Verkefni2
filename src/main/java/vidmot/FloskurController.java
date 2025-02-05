@@ -2,50 +2,35 @@ package vidmot;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import vinnsla.Floskur;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class FloskurController /*implements Initializable*/ {
-    Floskur floskur = new Floskur();
-    /*private Floskur vinnsluTilvisun;*/
+    private final Floskur floskur = new Floskur();
 
-    /*@Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        vinnsluTilvisun = new Floskur();
-    }*/
+    private int samtalsFjoldi = 0;
+    private int samtalsVirdi = 0;
 
-    @FXML
-    private HBox dosirHBox;
+    private int greidaVerd = 0;
+    private int greidaFjoldi = 0;
+
     @FXML
     private TextField textFieldDosir;
     @FXML
     private Label dosirLabel;
 
     @FXML
-    private HBox floskurHBox;
-    @FXML
     private TextField textFieldFloskur;
     @FXML
     private Label floskurLabel;
 
     @FXML
-    private HBox samtalsHBox;
-    @FXML
     private Label samtalsEinn;
     @FXML
     private Label samtalsTveir;
 
-    @FXML
-    private HBox greidaHBox;
-    @FXML
-    private Button buttonGreida;
     @FXML
     private Label greidaEinn;
     @FXML
@@ -56,6 +41,7 @@ public class FloskurController /*implements Initializable*/ {
 
     /**
      * Handler fyrir að setja inn fjölda dósa
+     * og bæta við þeim fjölda í samtals.
      *
      * @param actionEvent
      */
@@ -63,16 +49,39 @@ public class FloskurController /*implements Initializable*/ {
     protected void onDosir(ActionEvent actionEvent) {
         try {
             int fjoldiD = Integer.parseInt(textFieldDosir.getText());
+            if (fjoldiD < 0) {
+                throw new NumberFormatException();
+            }
+            int heildDosir = Integer.parseInt(dosirLabel.getText());
+
+            textFieldDosir.getStyleClass().removeAll("text-field-error");
+            textFieldDosir.getStyleClass().add("text-field-valid");
+
+            int gamlaGildi = floskur.getISKDosir();
+
             floskur.setFjoldiDosir(fjoldiD);
-            dosirLabel.setText(String.valueOf(fjoldiD));
+            dosirLabel.setText(String.valueOf(heildDosir + fjoldiD));
+
+            samtalsFjoldi += fjoldiD;
+
+            int nyjaGildi = floskur.getISKDosir();
+            samtalsVirdi += nyjaGildi - gamlaGildi;
+
+            samtalsEinn.setText(samtalsVirdi + "kr");
+            samtalsTveir.setText(String.valueOf(samtalsFjoldi));
+
+            textFieldDosir.clear();
         }
         catch (Exception e) {
-
+            textFieldDosir.getStyleClass().removeAll("text-field-valid");
+            textFieldDosir.getStyleClass().add("text-field-error");
+            textFieldDosir.clear();
         }
     }
 
     /**
      * Handler fyrir að setja inn fjölda flaska
+     * og bæta við þeim fjölda í samtals.
      *
      * @param actionEvent
      */
@@ -80,26 +89,55 @@ public class FloskurController /*implements Initializable*/ {
     protected void onFloskur(ActionEvent actionEvent) {
         try {
             int fjoldiF = Integer.parseInt(textFieldFloskur.getText());
-            floskur.setFjoldiDosir(fjoldiF);
-            floskurLabel.setText(String.valueOf(fjoldiF));
+            if (fjoldiF < 0) {
+                throw new NumberFormatException();
+            }
+            int heildFloskur = Integer.parseInt(floskurLabel.getText());
+
+            textFieldFloskur.getStyleClass().removeAll("text-field-error");
+            textFieldFloskur.getStyleClass().add("text-field-valid");
+
+            int gamlaGildi = floskur.getISKFloskur();
+
+            floskur.setFjoldiFloskur(fjoldiF);
+            floskurLabel.setText(String.valueOf(heildFloskur + fjoldiF));
+
+            samtalsFjoldi += fjoldiF;
+
+            int nyjaGildi = floskur.getISKFloskur();
+            samtalsVirdi += nyjaGildi - gamlaGildi;
+
+            samtalsEinn.setText(samtalsVirdi + "kr");
+            samtalsTveir.setText(String.valueOf(samtalsFjoldi));
+
+            textFieldFloskur.clear();
         }
         catch (Exception e) {
+            textFieldFloskur.getStyleClass().removeAll("text-field-valid");
+            textFieldFloskur.getStyleClass().add("text-field-error");
+            textFieldFloskur.clear();
 
         }
     }
 
     /**
-     * Handler til að greiða fyrir flöskur og dósir
+     * Handler til að greiða fyrir flöskur og dósir.
+     * Tekur fjölda úr "Samtals" þegar ýtt er á greiða.
      *
      * @param actionEvent
      */
     @FXML
     protected void onGreida(ActionEvent actionEvent) {
+        greidaVerd += samtalsVirdi;
+        greidaFjoldi += samtalsFjoldi;
 
+        greidaEinn.setText(greidaVerd + "kr");
+        greidaTveir.setText(String.valueOf(greidaFjoldi));
     }
 
     /**
-     * Handler til að hreinsa tölur úr dósa og flöskusviðum
+     * Handler til að hreinsa tölur úr öllum textFields og Labels.
+     * Hreinsar ekki Greiða.
      *
      * @param actionEvent
      */
@@ -112,5 +150,7 @@ public class FloskurController /*implements Initializable*/ {
         floskurLabel.setText("0");
         samtalsEinn.setText("0");
         samtalsTveir.setText("0");
+        samtalsFjoldi = 0;
+        samtalsVirdi = 0;
     }
 }
